@@ -1,5 +1,4 @@
 import os
-from git import Repo
 import dj_database_url
 from environs import Env
 
@@ -7,34 +6,22 @@ env = Env()
 env.read_env()
 
 YANDEX_API_KEY = env.str("YANDEX_API_KEY")
-#CORS_REPLACE_HTTPS_REFERER = False
-#HOST_SCHEME = "http://"
-#SECURE_PROXY_SSL_HEADER = None
-#SECURE_SSL_REDIRECT = False
-#SESSION_COOKIE_SECURE = False
-#CSRF_COOKIE_SECURE = False
-#CSRF_TRUSTED_ORIGINS = ["https://zatomis.ru"]
-#CSRF_TRUSTED_ORIGINS = list(env('DOMAIN'))
-#SECURE_HSTS_SECONDS = None
-#SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-#SECURE_FRAME_DENY = False
 
 
 SECRET_KEY = env('SECRET_KEY')
-DEBUG = env.bool('DEBUG', False)
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', ['.zatomis.ru', '127.0.0.1', 'localhost', '0.0.0.0', '5.35.95.186'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', ['127.0.0.1', 'localhost', '0.0.0.0', ])
 ROLLBAR_TOKEN = env('ROLLBAR_TOKEN_KEY', '')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-branch = Repo(path=BASE_DIR).active_branch.name
+
 
 ROLLBAR = {
     'access_token': ROLLBAR_TOKEN,
     'environment': env.str('ENVIRONMENT', 'Development'),
-    'branch': branch,
     'code_version': '1.0',
     'root': BASE_DIR,
 }
@@ -149,4 +136,5 @@ INTERNAL_IPS = [
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "assets"),
     os.path.join(BASE_DIR, "bundles"),
+   
 ]

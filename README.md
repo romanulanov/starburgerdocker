@@ -12,35 +12,6 @@
 
 Третий интерфейс — это админка. Преимущественно им пользуются программисты при разработке сайта. Также сюда заходит менеджер, чтобы обновить меню ресторанов Star Burger.
 
-## Настройки перед запуском сайта
-Для работы создаем основную БД для управления сайта. Развернем ей в докере
-Создаем `docker-compose.yml`
-```sh
-version: "3.8"
-services:
-  db:
-    container_name: postgres_container
-    image: postgres
-    restart: always
-    environment:
-    #Важно задать имя, пароль, имя базы - эти данные можно потом будет брать из файла .env
-      POSTGRES_USER: star...user
-      POSTGRES_PASSWORD: pas...56
-      POSTGRES_DB: st...er
-    ports:
-    #для избежания конфликтов изменим основной порт
-      - "5454:5432"
-  # для удобства администрирования см. https://www.youtube.com/watch?v=qECVC6t_2mU
-  pgadmin:
-    container_name: pgadmin4_container
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: root
-    ports:
-      - "5050:80"
-```
 
 ## Важное ! Файл `.env`
 Для работы сайта необходимо создать файл `.env`, вида
@@ -71,16 +42,15 @@ docker-compose -f docker-compose.yaml up -d
 Сайт запускается локально по адресу http://0.0.0.0:8000
 
 ## Как запустить prod-версию сайта
-Для запуска сайта нужно использовать команду, предварительно переименовав файл
-`docker-compose.prod.yaml` в `docker-compose.yaml`
+Для запуска сайта нужно использовать команду:
 ```sh
-docker-compose -f docker-compose.yaml up -d
+docker-compose -f docker-compose.local-dev.yaml up -d --build
 ```
 Сайт запускается по вашему адресу, который вы укажите в конфигурационном файле nginx
 Важно! на сайте необходимо установить сертификаты для вашего доменного [имени](https://letsencrypt.org/ru/getting-started/)
 
 ## Просмотр логов работы докера
-Для запуска сайта нужно использовать команду
+Для просмотра логов можно использовать команду:
 ```sh
 docker-compose logs
 ```
@@ -97,7 +67,7 @@ chmod ugo+x deploy_star_burger.sh
 upstream star_burger {server django-web:8000;}
 server {
     listen 80;
-    server_name zatomis.ru;
+    server_name ulanovroman.ru;
     charset utf8;
     autoindex off;
     location / {
@@ -106,12 +76,12 @@ server {
 }
 server {
     listen 443 ssl;
-    server_name zatomis.ru;
+    server_name ulanovroman.ru;
     charset utf8;
     autoindex off;
     add_header Strict-Transport-Security "max-age=31536000";
-    ssl_certificate /etc/letsencrypt/live/zatomis.ru/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/zatomis.ru/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/ulanovroman.ru/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ulanovroman.ru/privkey.pem;
     ssl_ciphers TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-256-GCM-SHA384:ECDHE:!COMPLEMENTOFDEFA>
     ssl_prefer_server_ciphers on;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
@@ -134,7 +104,7 @@ server {
 ```
 
 ## Пример работы
-Пример работы сайта доступно по [адресу](https://zatomis.ru) 🍔.
+Пример работы сайта можно посмотреть по [адресу](https://ulanovroman.ru.ru).
 
 
 ## Цели проекта
