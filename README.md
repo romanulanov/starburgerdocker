@@ -34,17 +34,16 @@ DATABASE_URL="postgresql://имя пользователя в БД:Пароль@
 
 ## Как запустить dev-версию сайта
 
-Для запуска сайта нужно использовать команду, предварительно переименовав файл
-`docker-compose.local-dev.yaml` в `docker-compose.yaml`
+Для запуска сайта нужно использовать команду:
 ```sh
-docker-compose -f docker-compose.yaml up -d
+docker-compose -f docker-compose.local-dev.yaml up -d --build
 ```
 Сайт запускается локально по адресу http://0.0.0.0:8000
 
 ## Как запустить prod-версию сайта
 Для запуска сайта нужно использовать команду:
 ```sh
-docker-compose -f docker-compose.local-dev.yaml up -d --build
+docker-compose -f docker-compose.prod.yaml up -d --build
 ```
 Сайт запускается по вашему адресу, который вы укажите в конфигурационном файле nginx
 Важно! на сайте необходимо установить сертификаты для вашего доменного [имени](https://letsencrypt.org/ru/getting-started/)
